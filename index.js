@@ -22,6 +22,9 @@ form.addEventListener('submit', async (e) => {
         name.value = '';
         cost.value = '';
         error.textContent = '';
+      })
+      .catch((err) => {
+        error.textContent = 'Error adding data.  Please try again later.';
       });
   }
 });
