@@ -43,10 +43,7 @@ const tip = d3
   .tip()
   .attr('class', 'tip card')
   .html((d) => {
-    let content = `<div class="name">${d.data.name}</div>`;
-    content += `<div class="cost">$${d.data.cost}</div>`;
-    content += `<div class="delete">Click slice to delete</div>`;
-    return content;
+    return `<div class="tiptool"><div><span class="name">${d.data.name} : </span><span class="cost">$${d.data.cost}</span></div><div class="delete"><i class="tiny material-icons">delete</i></div></div>`;
   });
 
 graph.call(tip);
@@ -90,8 +87,7 @@ const update = (data) => {
       tip.show(d, n[i]);
       handleMouseOver(d, i, n);
     })
-    .on('mouseout', handleMouseOut)
-    .on('click', handleClick);
+    .on('mouseout', handleMouseOut);
 };
 
 // data array and firestore
@@ -156,6 +152,9 @@ const handleMouseOver = (d, i, n) => {
     .transition('changeSliceFill')
     .duration(300)
     .attr('fill', '#fff');
+  d3.select('.delete').on('click', () => {
+    handleClick(d);
+  });
 };
 
 const handleMouseOut = (d, i, n) => {
@@ -165,8 +164,8 @@ const handleMouseOut = (d, i, n) => {
     .attr('fill', colour(d.data.name));
 };
 
-const handleClick = (d) => {
+function handleClick(d) {
   const id = d.data.id;
 
   db.collection('expenses').doc(id).delete();
-};
+}

@@ -8,6 +8,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <title>Money Tracker</title>
     <style>
       h2,
@@ -22,13 +26,20 @@
         background: #333;
         color: #fff;
         border-radius: 1rem;
+        min-width: 13%;
+      }
+      .tiptool {
+        display: flex;
+        justify-content: space-between;
+      }
+      .delete:hover {
+        cursor: pointer;
       }
       .name {
         margin-bottom: 0.5rem;
         text-transform: uppercase;
-        text-align: center;
+
         font-weight: 600;
-        font-size: 1.25rem;
       }
     </style>
   </head>
