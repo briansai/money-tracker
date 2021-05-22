@@ -38,6 +38,18 @@ const legend = d3
   .shapePadding(10)
   .scale(colour);
 
+// tool tip setup
+const tip = d3
+  .tip()
+  .attr('class', 'tip card')
+  .html((d) => {
+    let content = `<div class="name">${d.data.name}</div>`;
+    content += `<div class="cost">$${d.data.cost}</div>`;
+    content += `<div class="delete">Click slice to delete</div>`;
+    return content;
+  });
+
+graph.call(tip);
 // update function
 const update = (data) => {
   // update colour scale domain
@@ -74,8 +86,12 @@ const update = (data) => {
   // add events
   graph
     .selectAll('path')
-    .on('mouseover', handleMouseOver)
-    .on('mouseout', handleMouseOut);
+    .on('mouseover', (d, i, n) => {
+      tip.show(d, n[i]);
+      handleMouseOver(d, i, n);
+    })
+    .on('mouseout', handleMouseOut)
+    .on('click', handleClick);
 };
 
 // data array and firestore
@@ -135,16 +151,22 @@ function arcTweenUpdate(d) {
 }
 
 // event handlers
-function handleMouseOver(d, i, n) {
+const handleMouseOver = (d, i, n) => {
   d3.select(n[i])
     .transition('changeSliceFill')
     .duration(300)
     .attr('fill', '#fff');
-}
+};
 
-function handleMouseOut(d, i, n) {
+const handleMouseOut = (d, i, n) => {
   d3.select(n[i])
     .transition('changeSliceFill')
     .duration(300)
     .attr('fill', colour(d.data.name));
-}
+};
+
+const handleClick = (d) => {
+  const id = d.data.id;
+
+  db.collection('expenses').doc(id).delete();
+};
